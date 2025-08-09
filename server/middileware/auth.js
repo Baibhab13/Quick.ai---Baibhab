@@ -1,0 +1,1 @@
+//Middileare to check userid and hasPremiumplan
