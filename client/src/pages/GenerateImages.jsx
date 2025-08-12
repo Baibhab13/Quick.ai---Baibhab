@@ -47,7 +47,7 @@ const GenerateImages = () => {
   <label className="relative cursor-pointer">
     <input
       type="checkbox"
-      onChange={(e) => setPublish(e.target.checked)}
+      onChange={(e) => setpublish(e.target.checked)}
       checked={publish}
       className="sr-only peer"
     />
