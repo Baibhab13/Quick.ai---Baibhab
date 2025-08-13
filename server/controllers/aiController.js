@@ -249,7 +249,7 @@ export const resumeReview = async (req, res) => {
 
         // Read PDF from file path (since using diskStorage)
         const pdfBuffer = fs.readFileSync(resume.path);
-        const pdfdata = await PdfParse(pdfBuffer);
+        const pdfdata = await pdf(pdfBuffer);
 
         const prompt = `
         Review the resume and provide detailed feedback on:

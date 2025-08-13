@@ -29,34 +29,30 @@ export const getPublishedCreation = async (req, res) => {
 export const toggleLikeCreation = async (req, res) => {
     try {
         const { userId } = req.auth()
-        const { Id } = req.body
+        const { id } = req.body
 
-        const [creation] = await sql`SELECT * FROM creations WHERE id=${Id}`
+        const [creation] = await sql`SELECT * FROM creations WHERE id=${id}`
         if (!creation) {
             return res.json({ success: false, message: 'Creation not found' })
         }
-        const { like } = creation
-        const userIdstr = userId.toString()
-        let updatedLikes;
-        let message;
-        if (like.includes(userIdstr)) {
-            updatedLikes = like.filter(id => id !== userIdstr)
+
+        const likesArray = creation.likes || []
+        const userIdStr = userId.toString()
+        let updatedLikes, message
+
+        if (likesArray.includes(userIdStr)) {
+            updatedLikes = likesArray.filter(id => id !== userIdStr)
             message = 'Like removed'
         } else {
-            updatedLikes = [...like, userIdstr]
+            updatedLikes = [...likesArray, userIdStr]
             message = 'Like added'
         }
-        const formattedarray=`{${updatedLikes.json(',')}}`
-        await sql`UPDATE creations SET like=${formattedarray}::text[] WHERE id=${Id}`;
 
+        await sql`UPDATE creations SET likes=${updatedLikes} WHERE id=${id}`
 
-
-
-        res.json({ success: true, creations })
+        res.json({ success: true, creation: { ...creation, likes: updatedLikes }, message })
 
     } catch (error) {
-
         res.json({ success: false, message: error.message })
-
     }
 }

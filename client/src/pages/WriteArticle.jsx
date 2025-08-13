@@ -4,7 +4,7 @@ import axios from 'axios'
 import { useAuth } from '@clerk/clerk-react'
 import Markdown from 'react-markdown'
 
-
+ axios.defaults.baseURL = import.meta.env.VITE_BASE_URL
 const WriteArticle = () => {
 
   const articlelength = [
@@ -12,7 +12,7 @@ const WriteArticle = () => {
     { length: 1200, text: 'Medium (800-1200 word)' },
     { length: 1600, text: 'Long (1200+ word)' }
   ]
-  axios.defaults.baseURL = import.meta.env.VITE_BASE_URL
+
 
 
   const [selectedlength, setselectedlength] = useState(articlelength[0])

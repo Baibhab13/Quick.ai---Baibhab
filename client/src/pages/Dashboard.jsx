@@ -1,14 +1,33 @@
 import React, { useEffect, useState } from 'react'
 import { dummyCreationData } from '../assets/assets'
 import { Gem, Sparkle } from 'lucide-react'
-import { Protect } from '@clerk/clerk-react'
+import { Protect, useAuth } from '@clerk/clerk-react'
 import CreationItem from '../components/CreationItem'
+import axios from 'axios'
+axios.defaults.baseURL = import.meta.env.VITE_BASE_URL
 
 const Dashboard = () => {
 
   const [creations, setcreations] = useState([])
+  const [loading,setloading]=useState(true)
+  const {getToken}=useAuth()
+
   const getdashboardData = async () => {
-    setcreations(dummyCreationData)
+    try {
+      const {data}=await axios.get('/api/user/get-user-creation',{
+        headers: {
+          Authorization: `Bearer ${await getToken()}`
+        }
+      })
+      if (data.success) {
+        setcreations(data.creations)
+      } else {
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error(error.message)
+    }
+    setloading(false)
   }
   useEffect(() => {
     getdashboardData()
@@ -42,8 +61,8 @@ const Dashboard = () => {
         </div>
       </div>
 
-
-      <div className='space-y-3'>
+      {
+        !loading?( <div className='space-y-3'>
         <p className='mt-6 mb-4'>Recent Creations</p>
         {
           creations.map((item) => (
@@ -53,7 +72,15 @@ const Dashboard = () => {
         }
 
 
-      </div>
+      </div>):(
+        <div className='flex justify-center items-center h-3/4'>
+      <span className='w-10 h-10 my-1 rounded-full border-3 border-primary border-t-transparent animate-spin'></span>
+    </div>
+      )
+      }
+
+
+     
     </div>
 
   )
