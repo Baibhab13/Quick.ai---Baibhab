@@ -3,7 +3,7 @@
 Quick.AI is an AI-powered productivity platform that helps users generate creative content and visuals with ease.  
 It comes with **Clerk-based authentication** and **subscription plans** (Free & Premium) to unlock advanced features.  
 
-🌐 **Live Demo**: [Quick.AI]([https://your-vercel-link.vercel.app](https://quick-ai-rust.vercel.app/))
+🌐 **Live Demo**: [Quick.AI](https://quick-ai-rust.vercel.app/)
 
 ---
 
