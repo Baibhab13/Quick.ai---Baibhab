@@ -24,7 +24,7 @@ It comes with **Clerk-based authentication** and **subscription plans** (Free & 
 ---
 
 ## 🛠️ Tech Stack
-- **Frontend**: React.js, TailwindCSS  
+- **Frontend**: React.js, TailwindCSS ,PrebuiltUI
 - **Backend**: Node.js, Express.js  
 - **Authentication & Payments**: Clerk  
 - **Database**: PostgreSQL / MongoDB 
