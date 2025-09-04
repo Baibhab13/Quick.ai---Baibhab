@@ -3,7 +3,7 @@
 Quick.AI is an AI-powered productivity platform that helps users generate creative content and visuals with ease.  
 It comes with **Clerk-based authentication** and **subscription plans** (Free & Premium) to unlock advanced features.  
 
-🌐 **Live Demo**: [Quick.AI](https://quick-ai-rust.vercel.app/)
+🌐 **Live Demo**: [Quick.ai](https://quick-ai-rust.vercel.app/)
 
 ---
 
@@ -24,10 +24,10 @@ It comes with **Clerk-based authentication** and **subscription plans** (Free & 
 ---
 
 ## 🛠️ Tech Stack
-- **Frontend**: React.js, TailwindCSS  
+- **Frontend**: React.js, TailwindCSS ,PrebuiltUI
 - **Backend**: Node.js, Express.js  
 - **Authentication & Payments**: Clerk  
-- **Database**: PostgreSQL / MongoDB 
+- **Database**: PostgreSQL
 - **Deployment**: Vercel  
 
 
