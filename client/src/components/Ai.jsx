@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import image from "../assets/image.png";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "@clerk/clerk-react"; // Clerk hook
 
 function Ai() {
   const navigate = useNavigate();
-  const [listening, setListening] = useState(false); // track listening state
+  const { isSignedIn } = useUser();
+  const [listening, setListening] = useState(false);
 
-  // Speak function
   function speak(message) {
     let utterance = new SpeechSynthesisUtterance(message);
     window.speechSynthesis.speak(utterance);
   }
 
-  // Setup speech recognition
   const SpeechRecognition =
     window.SpeechRecognition || window.webkitSpeechRecognition;
   const recognition = SpeechRecognition ? new SpeechRecognition() : null;
@@ -27,37 +27,39 @@ function Ai() {
     recognition.interimResults = false;
     recognition.lang = "en-US";
 
-    recognition.onstart = () => {
-      setListening(true); // 🎤 started listening
-    };
-
-    recognition.onend = () => {
-      setListening(false); // 🎤 stopped listening
-    };
+    recognition.onstart = () => setListening(true);
+    recognition.onend = () => setListening(false);
 
     recognition.onresult = (e) => {
       const transcript = e.results[0][0].transcript.trim().toLowerCase();
       console.log("User said:", transcript);
 
-      // Commands with variations
+      // Commands (public vs private)
       const commands = [
-        { variations: [["dashboard"]], path: "/ai", message: "Opening dashboard" },
-        { variations: [["write", "article"], ["article"]], path: "/ai/write-article", message: "Opening write article" },
-        { variations: [["blog", "titles"], ["blog", "title"],["block", "title"]], path: "/ai/blog-titles", message: "Opening blog titles" },
-        { variations: [["generate", "images"], ["generate", "image"]], path: "/ai/generate-images", message: "Opening generate images" },
-        { variations: [["remove", "background"], ["background"]], path: "/ai/remove-background", message: "Opening remove background" },
-        { variations: [["remove", "object"], ["delete", "object"], ["object"]], path: "/ai/remove-object", message: "Opening remove object" },
-        { variations: [["review", "resume"], ["resume"]], path: "/ai/review-resume", message: "Opening review resume" },
-        { variations: [["community"]], path: "/ai/community", message: "Opening community" },
-        { variations: [["home","page"]], path: "/", message: "Going home" },
+        { variations: [["dashboard"],["get started"]], path: "/ai", message: "Opening dashboard", private: true },
+        { variations: [["write", "article"], ["article"]], path: "/ai/write-article", message: "Opening write article", private: true },
+        { variations: [["blog", "titles"], ["blog", "title"],["block", "title"]], path: "/ai/blog-titles", message: "Opening blog titles", private: true },
+        { variations: [["generate", "images"], ["generate", "image"]], path: "/ai/generate-images", message: "Opening generate images", private: true },
+        { variations: [["remove", "background"], ["background"]], path: "/ai/remove-background", message: "Opening remove background", private: true },
+        { variations: [["remove", "object"], ["delete", "object"], ["object"]], path: "/ai/remove-object", message: "Opening remove object", private: true },
+        { variations: [["review", "resume"], ["resume"]], path: "/ai/review-resume", message: "Opening review resume", private: true },
+        { variations: [["community"]], path: "/ai/community", message: "Opening community", private: true },
+        { variations: [["home","page"]], path: "/", message: "Going home", private: false }, // 👈 public route
       ];
 
       let matched = false;
       for (let cmd of commands) {
         for (let variation of cmd.variations) {
           if (variation.every((word) => transcript.includes(word))) {
-            speak(cmd.message);
-            navigate(cmd.path);
+            if (cmd.private && !isSignedIn) {
+              // Protected route but user not logged in
+              speak("You need to log in first.");
+              navigate("/ai");
+            } else {
+              // Public route or logged in user
+              speak(cmd.message);
+              navigate(cmd.path);
+            }
             matched = true;
             break;
           }
@@ -69,7 +71,7 @@ function Ai() {
         speak("Sorry, I did not understand that command.");
       }
     };
-  }, [recognition, navigate]);
+  }, [recognition, navigate, isSignedIn]);
 
   return (
     <div
