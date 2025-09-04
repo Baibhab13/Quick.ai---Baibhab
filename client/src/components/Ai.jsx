@@ -36,7 +36,7 @@ function Ai() {
 
       // Commands (public vs private)
       const commands = [
-        { variations: [["dashboard"],["get started"]], path: "/ai", message: "Opening dashboard", private: true },
+        { variations: [["dashboard"],["get started"],["Start creating now"],[" creating now"]], path: "/ai", message: "Opening dashboard", private: true },
         { variations: [["write", "article"], ["article"]], path: "/ai/write-article", message: "Opening write article", private: true },
         { variations: [["blog", "titles"], ["blog", "title"],["block", "title"]], path: "/ai/blog-titles", message: "Opening blog titles", private: true },
         { variations: [["generate", "images"], ["generate", "image"]], path: "/ai/generate-images", message: "Opening generate images", private: true },
